@@ -31,21 +31,28 @@ export const recordVideoView = (media_id, user_id) => {
 }
 
 export const getMediaObject = async (media_id, user_id) => {
-    return {
-        name: "A video",
-        likes: 20,
-        created_at: new Date(),
-        comments: 45,
-        views: 14,
-    }
-    // const { data } = await axios.get(`/api/media/${media_id}`)
-    // recordVideoView(media_id, user_id)
-
-    // const { success, data: d, message } = data
-    // if (!success) {
-    //     throw { message }
+    // return {
+    //     name: "A video",
+    //     likes: 20,
+    //     created_at: new Date(),
+    //     comments: 45,
+    //     views: 14,
     // }
-    // return d
+    const { data } = await axios.get(`/api/media/${media_id}`)
+    recordVideoView(media_id, user_id)
+
+    const { success, data: d, message } = data
+
+    if (!d) {
+        return {
+            name: "Loading...",
+            likes: (localStorage.getItem(`likes:${media_id}`)=='true') | 0,
+            created_at: new Date(),
+            comments: 0,
+            views: 1,
+        }
+    }
+    return d
 }
 
 export const getLatestPdf = async () => {

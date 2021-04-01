@@ -47,4 +47,4 @@ const Modals = ({ show, handleClose, name, email, setEmail, setName}) => {
     )
 }
 
-export default Modal
+export default Modals;

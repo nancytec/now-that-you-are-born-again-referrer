@@ -30,15 +30,23 @@ const Main = ({ match, }) => {
 
     const nameFromState = localStorage.getItem('userDetails') && JSON.parse(localStorage.getItem('userDetails')).name
 
+
     useEffect(() => {
         localStorage.getItem('userDetails') ? JSON.parse(localStorage.getItem('userDetails')) : setShow(true)
 
         setName(nameFromState)
 
-        localStorage.getItem(`likes:${media_id}`) === 'true' && setLike(true);
+        const liked = localStorage.getItem(`likes:${media_id}`) === 'true';
+        if (liked) {
+            setLike(true);
+        }
 
         getMediaObject(media_id, user_id)
-            .then((d) => setData(d))
+            .then((d) => {
+                const media_title = d?.name || document.title;
+                setData(d)
+                document.title = media_title;
+            })
             .catch(({ message }) => swal("Error", message, 'error'));
 
         getComments(media_id)
@@ -61,7 +69,10 @@ const Main = ({ match, }) => {
     }
 
     const handleIcon = () => {
-        !like && setLike(true)
+        const liked = localStorage.getItem(`likes:${media_id}`) === 'true';
+        if (liked) return;
+        setLike(true);
+        localStorage.setItem(`likes:${media_id}`, 'true');
         recordMediaStat(media_id, 'like')
     }
 
@@ -128,13 +139,19 @@ const Main = ({ match, }) => {
                                 <VisibilityIcon style={{ "cursor": "pointer", }} /> <span>{toHumanString(data?.views)}</span>
                             </div>
                             <div className='icon'>
-                                <ThumbUpAltIcon onClick={handleIcon} style={{ "cursor": "pointer", color: like ? "blue" : '' }} /> <span>{toHumanString(data?.likes)}</span>
+                                <span onClick={handleIcon}>
+                                    <ThumbUpAltIcon style={{ "cursor": "pointer", color: like ? "blue" : '' }} /> <span>{toHumanString(data?.likes)}</span>
+                                </span>
                             </div>
                             <div className='icon'>
-                                <ShareIcon onClick={() => setShare(true)} style={{ "cursor": "pointer" }} /> <span>Share</span>
+                                <span onClick={() => setShare(true)}>
+                                    <ShareIcon style={{ "cursor": "pointer" }} /> <span>Share</span>
+                                </span>
                             </div>
                             <div className='icon'>
-                                <GetAppIcon onClick={handleDownload} style={{ "cursor": "pointer" }} /> <span>Download</span>
+                                <span onClick={handleDownload}>
+                                    <GetAppIcon style={{ "cursor": "pointer" }} /> <span>Download</span>
+                                </span>
                             </div>
                         </Col>
                     </Row>
@@ -177,7 +194,7 @@ const Main = ({ match, }) => {
                             <Card style={{width: "80%", height: "fill"}} className='card mx-auto my-3'>
                                 <Card.Img variant="top" src="https://media.kasperskydaily.com/wp-content/uploads/sites/92/2020/02/28163447/36C3-PDF-encryption-featured2.jpg" />
                                 <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
+                                    <Card.Title>{pdf?.name || "Loading..."}</Card.Title>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -199,7 +216,7 @@ const Main = ({ match, }) => {
                                 </div>
                             </Carousel>
                             <Card.Footer>
-                                <p>they</p>
+                                <p>Flyer</p>
                             </Card.Footer>
                             </Card>
                         </Col>
