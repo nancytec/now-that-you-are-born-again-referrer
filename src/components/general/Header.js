@@ -1,11 +1,13 @@
 import React from 'react'
 import { Container, Image } from 'react-bootstrap'
-import pic from './LWPL2-Logo.png'
+import pic from './logo.png'
 
 const Header = () => {
     return (
         <Container fluid>
-            <Image src={pic} width='250px' className='img' />
+            <Image style={{
+                width: '150px'
+            }} src={pic} width='250px' className='img' />
         </Container>
     )
 }

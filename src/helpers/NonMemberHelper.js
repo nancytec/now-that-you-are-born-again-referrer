@@ -76,13 +76,13 @@ export const fetchUser = async (user_slug) => {
 }
 
 export const fetchMediaLinkLikes = async () => {
-    const { data } = await axios.get(`${rootLink()}/api/media_link/likes`);
+    const { data } = await axios.get(`${rootLink()}/api/non_member_media_link/likes`);
     return data;
 }
 
 export const fetchMediaLinkViews = async () => {
     const path_name = window.location.pathname;
-    const { data } = await axios.post(`${rootLink()}/api/media_link/views`, {
+    const { data } = await axios.post(`${rootLink()}/api/non_member_media_link/views`, {
         path_name,
     });
     return data;
@@ -91,26 +91,28 @@ export const fetchMediaLinkViews = async () => {
 // Getting curent path in Javascript
 export const updateMediaLinkViews = async () => {
     const path_name = window.location.pathname;
-    const member_slug =  path_name.split('/')[4];
+    const unique_id =  path_name.split('/')[4];
 
-    const d = await axios.post(`${rootLink()}/api/media_link_views/update`, {
+    const d = await axios.post(`${rootLink()}/api/non_member_media_link_views/update`, {
         path_name,
-        member_slug,
+        unique_id,
     });
     return d;
 
 }
+
 export const updateMediaLinkDownloads = async () => {
     const path_name = window.location.pathname;
-    const { data } = await axios.post(`${rootLink()}/api/media_link/downloads/update`, {
+    const data = await axios.post(`${rootLink()}/api/non_member_media_link/downloads/update`, {
         path_name,
     });
+    console.log(data);
     return data;
 }
 
 export const fetchMediaLinkDownloads = async () => {
     const path_name = window.location.pathname;
-    const { data } = await axios.post(`${rootLink()}/api/media_link/downloads`, {
+    const { data } = await axios.post(`${rootLink()}/api/non_member_media_link/downloads`, {
         path_name,
     });
     return data;
@@ -119,7 +121,7 @@ export const fetchMediaLinkDownloads = async () => {
 
 export const fetchMediaLinkShares = async () => {
     const path_name = window.location.pathname;
-    const { data } = await axios.post(`${rootLink()}/api/media_link/shares`, {
+    const { data } = await axios.post(`${rootLink()}/api/non_member_media_link/shares`, {
         path_name,
     });
     return data;
